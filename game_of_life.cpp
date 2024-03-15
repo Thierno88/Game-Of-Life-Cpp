@@ -1,10 +1,10 @@
-#include <SFML/Graphics.hpp>
+]#include <SFML/Graphics.hpp>
 #include <iostream>
 #include <time.h>
 
 //std::vector<std::vector<sf::RectangleShape>> grid(numRows, std::vector<sf::RectangleShape>(numCols));
 std::vector<std::vector<sf::RectangleShape>> createGrid(int numRows, int numCols, int cellSize, int spacing);
-
+void paintClick(sf::RenderWindow& window, std::vector<std::vector<sf::RectangleShape>>& grid, int numRows, int numCols, int cellSize, int spacing);
 
 int main() {
 	const int height = 600;
@@ -34,38 +34,14 @@ int main() {
 				window.draw(grid[i][j]);
 			}
 		}
-
-		// Get mouse click and select 
-		grid[2][10].setFillColor(sf::Color::White);
+		//Get maouse click and paint the right cell
+		paintClick(window,grid,numRows,numCols,cellSize,spacing);
 		
-		bool painting = true;
-		if (painting) {
-			static int currentRow = 2;
-			static int currentCol = 10;
-
-
-			if (currentRow < numRows) {
-				grid[currentRow][currentCol].setFillColor(sf::Color::White);
-				currentCol++;
-				if (currentCol >= numCols) {
-					currentCol = 0;
-					currentRow++;
-				}
-				sf::sleep(sf::microseconds(100)); // Pausa de 1 segundo entre cada célula pintada
-			}
-			else {
-				painting = false;
-			}
-		}
-
 		window.display();
 	}
 
 	return 0;
 }
-
-
-
 
 std::vector<std::vector<sf::RectangleShape>> createGrid(int numRows, int numCols, int cellSize, int spacing){
 
@@ -85,4 +61,16 @@ std::vector<std::vector<sf::RectangleShape>> createGrid(int numRows, int numCols
 
 	return grid;
 
+}
+
+void paintClick(sf::RenderWindow& window, std::vector<std::vector<sf::RectangleShape>>& grid, int numRows,int numCols,int cellSize,int spacing) {
+	if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
+	{
+		sf::Vector2i mousePosition = sf::Mouse::getPosition(window);
+		int row = mousePosition.y / (cellSize + spacing);
+		int col = mousePosition.x / (cellSize + spacing);
+		if (row >= 0 && row < numRows && col >= 0 && col < numCols) {
+			grid[row][col].setFillColor(sf::Color::White);
+		}
+	}
 }
