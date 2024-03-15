@@ -1,1 +1,1 @@
-# Game-Of-Life-C-
+# Game-Of-Life-C++
